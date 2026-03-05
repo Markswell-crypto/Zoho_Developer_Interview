@@ -42,5 +42,5 @@ const App = () => {
         {country && <Country country={country} />}
       </div>  
     );
-}
+  } 
 export default App;
