@@ -39,6 +39,8 @@ const App = () => {
         <h1>Country Info</h1>
         <SearchBar onSearch={handleSearch} />
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        {country && <Country country={country} />}  
-    )
+        {country && <Country country={country} />}
+      </div>  
+    );
+}
 export default App;
