@@ -1,35 +1,44 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import SearchBar from './SearchBar'
+import Country from './Country'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
-
-export default App
+const App = () => {
+  const [country, setCountry] = useState(null);
+  const [error, setError] = useState(null);
+  const handleSearch = async (countryName) => {
+    setError(null);
+    try {
+      const response = await fetch(`https://www.apicountries.com/countries/${name}`);
+      if (response.data && response.data.length > 0) {
+        const c = response.data[0];
+        setCountry({
+          name: c.name,
+          officialName: c.officialNameEnglish,
+          citizenship: c.citizenship,
+          capital: c.capital,
+          continent: c.continent,
+          population: c.population,
+          landmass: c.landmass,
+          timezones: c.timezones,
+          flag: c.flag,
+          currencies: c.currencies,
+          languages: c.languages,
+        });
+      } else {
+        setError("Country not found");
+        setCountry(null);
+      }
+    } catch (err) {
+      setError("Error fetching country data");
+      setCountry(null);
+    } 
+    return (
+      <div className="App">
+        <h1>Country Info</h1>
+        <SearchBar onSearch={handleSearch} />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {country && <Country country={country} />}  
+    )
+export default App;
